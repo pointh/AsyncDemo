@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDemo", "ConsoleApp15\AsyncDemo.csproj", "{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {660F0413-5D04-46B6-89D1-454943CE619F}
+	EndGlobalSection
+EndGlobal
