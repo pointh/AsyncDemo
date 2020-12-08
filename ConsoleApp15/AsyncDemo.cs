@@ -18,7 +18,7 @@ namespace AsyncDemoNS
                 for (i = 0; i < 20; i++)
                 {
                     Debug.WriteLine($"MocPrace:{System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(500);
                     Console.SetCursorPosition(10, 10);
                     Console.Write(i);
                     Console.SetCursorPosition(0, 0);
@@ -58,11 +58,13 @@ namespace AsyncDemoNS
         {
             Debug.WriteLine($"Main:{System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
 
-            MocPrace();
-
             Vrtule(0, 0);
 
-            await Vrtule(5, 0);
+            Vrtule(5, 0);
+
+            int i = await MocPrace();
+
+            Console.WriteLine(i);
 
         }
     }
