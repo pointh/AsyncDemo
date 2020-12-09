@@ -58,9 +58,13 @@ namespace AsyncDemoNS
         {
             Debug.WriteLine($"Main:{System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
 
-            Vrtule(0, 0);
-
-            Vrtule(5, 0);
+            for (int k = 18; k <= 21; k += 2)
+            {
+                for (int j = 18; j <= 21; j +=2)
+                {
+                        Vrtule(k, j);
+                }
+            }
 
             int i = await MocPrace();
 
