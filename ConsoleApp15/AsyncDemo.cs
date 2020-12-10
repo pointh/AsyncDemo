@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Diagnostics;
 
 namespace AsyncDemoNS
@@ -10,30 +11,40 @@ namespace AsyncDemoNS
     {
         private static readonly object consoleLock = new object();
 
+        private static readonly CancellationTokenSource source = new CancellationTokenSource();
+        private static readonly CancellationToken ct = source.Token;
+
+
         public async static Task<int> MocPrace()
         {
             int i = 0;
             await Task.Run(() =>
             {
-                for (i = 0; i < 20; i++)
+                for (i = 15; i > -1; i--)
                 {
-                    Debug.WriteLine($"MocPrace:{System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
-                    System.Threading.Thread.Sleep(500);
-                    Console.SetCursorPosition(10, 10);
-                    Console.Write(i);
-                    Console.SetCursorPosition(0, 0);
+                    Debug.WriteLine($"MocPrace:{Thread.CurrentThread.ManagedThreadId}" + 
+                        $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
+                    Thread.Sleep(300);
+                    lock (consoleLock)
+                    {
+                        Console.SetCursorPosition(10, 10);
+                        Console.Write(i);
+                        Console.SetCursorPosition(0, 0);
+                    }
                 }
+                // když skončíš, pošli CancellationRequest na všechny, kto mají token ze source
+                source.Cancel();
             });
             return i;
         }
 
         public async static Task Vrtule(int x, int y)
         {
-            void OverwriteOn0(char c)
+            void OverwriteVrtule(char c)
             {
                 lock (consoleLock)
                 {
-                    System.Threading.Thread.Sleep(50);
+                    Thread.Sleep(100);
                     Console.SetCursorPosition(x, y);
                     Console.Write(c);
                 }
@@ -45,31 +56,48 @@ namespace AsyncDemoNS
 
                 while (true)
                 {
-                    Debug.WriteLine($"Vrtule[{x},{y}]: {System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
-                    OverwriteOn0('|');
-                    OverwriteOn0('/');
-                    OverwriteOn0('-');
-                    OverwriteOn0('\\');
+                    if (ct.IsCancellationRequested && x > y)
+                    {
+                        break;
+                    }
+
+                    Debug.WriteLine($"Vrtule[{x},{y}]: {Thread.CurrentThread.ManagedThreadId}" +
+                        $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
+                    OverwriteVrtule('|');
+                    OverwriteVrtule('/');
+                    OverwriteVrtule('-');
+                    OverwriteVrtule('\\');
                 }
             });
         }
 
         static async Task Main(string[] args)
         {
-            Debug.WriteLine($"Main:{System.Threading.Thread.CurrentThread.ManagedThreadId}", "SYNC");
 
-            for (int k = 18; k <= 21; k += 2)
+
+            Debug.WriteLine($"Main:{Thread.CurrentThread.ManagedThreadId}" +
+                $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
+
+            // normálně je MaxThreads = 4 - asi podle procesorů
+            string v = $"ThereadPool setting : {ThreadPool.SetMaxThreads(72, 72)}";
+            Console.WriteLine(v);
+
+            // fire and forget - nečekej na výsledek
+            MocPrace();
+
+            for (int k = 16; k <= 21; k++)
             {
-                for (int j = 18; j <= 21; j +=2)
+                for (int j = 16; j <= 21; j++)
                 {
-                        Vrtule(k, j);
+                    // fire and forget - nečekej na výsledek
+                    // Vrtule se naplánují v thread poolu, o spouštění si rozhodne OS
+                    Vrtule(k, j);
                 }
             }
 
-            int i = await MocPrace();
-
-            Console.WriteLine(i);
-
+            // tohle se vypíše hned, pokud kdykoliv přijde Enter, aplikace skončí
+            Console.WriteLine("Čekám na Enter");
+            Console.ReadLine();
         }
     }
 }
