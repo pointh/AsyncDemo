@@ -43,7 +43,7 @@ namespace AsyncDemoNS
             {
                 lock (consoleLock)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(10);
                     Console.SetCursorPosition(x, y);
                     Console.Write(c);
                 }
@@ -83,13 +83,17 @@ namespace AsyncDemoNS
             // fire and forget - nečekej na výsledek
             MocPrace();
 
-            for (int k = 18; k <= 21; k++)
+            for (int k = 15; k <= 21; k++)
             {
-                for (int j = 18; j <= 21; j++)
+                for (int j = 15; j <= 21; j++)
                 {
                     // fire and forget - nečekej na výsledek
                     // Vrtule se naplánují v thread poolu, o spouštění si rozhodne OS
-                    Vrtule(k, j);
+                    Thread t = new Thread(() => Vrtule(k, j));
+                    t.IsBackground = true;
+                    t.Name = $"{k}:{j}";
+                    t.Priority = ThreadPriority.AboveNormal;
+                    t.Start();
                 }
             }
 
