@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace AsyncDemoNS
 {
@@ -58,6 +57,7 @@ namespace AsyncDemoNS
                 {
                     if (ct.IsCancellationRequested && x > y)
                     {
+                        OverwriteVrtule('*');
                         break;
                     }
 
@@ -73,21 +73,19 @@ namespace AsyncDemoNS
 
         static async Task Main(string[] args)
         {
-
+            int availableWorkers = 0, availableAsyncIO = 0;
+            ThreadPool.GetAvailableThreads(out availableWorkers, out availableAsyncIO);
+            Console.WriteLine($"Available workers: {availableWorkers}, available Async: {availableAsyncIO}");
 
             Debug.WriteLine($"Main:{Thread.CurrentThread.ManagedThreadId}" +
                 $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
 
-            // normálně je MaxThreads = 4 - asi podle procesorů
-            string v = $"ThereadPool setting : {ThreadPool.SetMaxThreads(72, 72)}";
-            Console.WriteLine(v);
-
             // fire and forget - nečekej na výsledek
             MocPrace();
 
-            for (int k = 16; k <= 21; k++)
+            for (int k = 18; k <= 21; k++)
             {
-                for (int j = 16; j <= 21; j++)
+                for (int j = 18; j <= 21; j++)
                 {
                     // fire and forget - nečekej na výsledek
                     // Vrtule se naplánují v thread poolu, o spouštění si rozhodne OS
