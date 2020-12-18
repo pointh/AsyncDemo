@@ -1,0 +1,17 @@
+﻿<Window x:Class="WpfAsync.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAsync"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="136" Width="698">
+    <StackPanel>
+        <Button Content="Moc práce" Click="Button_Click_Prace"/>
+        <!-- Binding na Counter a Vrtule bude hledat v rozsahu definovaném 
+        v MainWindow.xaml.cs: Rozsah je v proměnné DataContext -->
+        <TextBox x:Name="MocpraceText" Text ="{Binding Counter}" TextAlignment="Center"/>
+        <Button Content="Vrť" Click="Button_Click_Vrt"/>
+        <TextBox x:Name="VrtText" Text="{Binding Vrtule}" TextAlignment="Center" />
+    </StackPanel>
+</Window>
