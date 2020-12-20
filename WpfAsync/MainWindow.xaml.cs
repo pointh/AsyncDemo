@@ -18,8 +18,8 @@ namespace WpfAsync
     {
         // pokud chceme signalizovat ostatním vláknům požadavek na zastavení,
         // musíme vytvořit "token" - značku, která bude reagovat na změnu ve zdroji - "source"
-        private static CancellationTokenSource cts = new CancellationTokenSource();
-        private CancellationToken ct = cts.Token;
+        private static CancellationTokenSource cts;
+        private CancellationToken ct;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
