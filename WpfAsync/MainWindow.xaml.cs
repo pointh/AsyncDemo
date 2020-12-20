@@ -62,27 +62,86 @@ namespace WpfAsync
 
         private void Button_Click_Prace(object sender, RoutedEventArgs e)
         {
+            cts = new CancellationTokenSource();
+            ct = cts.Token;
+
             // Pošli cyklus na threadpool thread
             Task.Run(() =>
-            {
-                for (int i = 15; i > 0; i--)
                 {
-                    Counter = i.ToString();
+                    for (int i = 15; i > 0; i--)
+                    {
+                        Counter = i.ToString();
 
-                    // Jsme na threadpool threadu, takže nezablokujeme UI thread
-                    // Vteřinu počká, než změní obsah Counter
-                    Thread.Sleep(1000);
-                }
+                        // Jsme na threadpool threadu, takže nezablokujeme UI thread
+                        // Vteřinu počká, než změní obsah Counter
+                        Thread.Sleep(1000);
+                    }
 
-                // Všichni, kdo mají token z cts zdroje dostanou informaci
-                // o požadavku na zastavení. (ct.IsCancellationRequested bude true)
-                cts.Cancel();
-
-                Counter = "";
-            });
+                    // Všichni, kdo mají token z cts zdroje dostanou informaci
+                    // o požadavku na zastavení. (ct.IsCancellationRequested bude true)
+                    cts.Cancel();
+                    Counter = "";
+                });
         }
 
-        private void Button_Click_Vrt(object sender, RoutedEventArgs e)
+        // Když chceme, aby asynchronní metoda něco vracela, používáme generickou konstrukci
+        // Task<návratový_typ> a musíme zajistit, aby spuštěná lambda vracela návratový_typ
+        // protože je metoda async, musíme await Task:
+        private async Task<int> TocSeVrtuleAsync()
+        {
+            int i = 0;
+            await Task.Run(() =>
+            {
+                while (ct.IsCancellationRequested == false)
+                {
+                    i++;
+                    Vrtule = "-";
+
+                    // Následující volání Sleep() nezablokují UI thread, protože běží na threadpool threadu
+                    Thread.Sleep(500);
+                    Vrtule = "\\";
+                    Thread.Sleep(500);
+                    Vrtule = "|";
+                    Thread.Sleep(500);
+                    Vrtule = "/";
+                    Thread.Sleep(500);
+                    Vrtule = "/";
+                    Thread.Sleep(500);
+                }
+                Vrtule = "";
+
+            });
+            return i;
+        }
+
+        private async Task<int> TocSeVrtuleAsync(int delay = 1500)
+        {
+            int i = 0;
+            await Task.Run(() =>
+            {
+                while (ct.IsCancellationRequested == false)
+                {
+                    i++;
+                    Vrtule = "-";
+
+                    // Následující volání Sleep() nezablokují UI thread, protože běží na threadpool threadu
+                    Thread.Sleep(delay);
+                    Vrtule = "\\";
+                    Thread.Sleep(delay);
+                    Vrtule = "|";
+                    Thread.Sleep(delay);
+                    Vrtule = "/";
+                    Thread.Sleep(delay);
+                    Vrtule = "/";
+                    Thread.Sleep(delay);
+                }
+                Vrtule = "";
+
+            });
+            return i;
+        }
+
+        private async void Button_Click_Vrt(object sender, RoutedEventArgs e)
         {
 
             // Zablokuje UI thread
@@ -117,6 +176,7 @@ namespace WpfAsync
             });
             */
 
+            /* Tohle bude fungovat
             Task.Run(() =>
             {
                 // Dokud na zdroji, který obsahuje ct (což je cts) nebude zavolaná metoda Cancel()
@@ -137,6 +197,14 @@ namespace WpfAsync
                 }
                 Vrtule = "";
             });
+            */
+
+            // kdybychom nepoužili await, program by zde skončil v nekonečném cyklu Vrtule
+            // int pocetOtacek = await TocSeVrtuleAsync();
+
+            // override TocSeVrtule s možností nastavit rychlost otáčení
+            int pocetOtacek = await TocSeVrtuleAsync(800);
+            Vrtule = pocetOtacek.ToString();
         }
     }
 }
