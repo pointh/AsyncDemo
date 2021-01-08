@@ -6,11 +6,16 @@
         xmlns:local="clr-namespace:WpfAsync"
         mc:Ignorable="d"
         Title="MainWindow" Height="136" Width="698">
+    <Window.Resources>
+        <local:IntToKoleckaConverter x:Key="IntToKoleckaConverterKey"/>
+    </Window.Resources>
     <StackPanel>
         <Button Content="Moc práce" Click="Button_Click_Prace"/>
         <!-- Binding na Counter a Vrtule bude hledat v rozsahu definovaném 
         v MainWindow.xaml.cs: Rozsah je v proměnné DataContext -->
-        <TextBox x:Name="MocpraceText" Text ="{Binding Counter}" TextAlignment="Center"/>
+        <TextBox x:Name="MocpraceText" 
+                 Text ="{Binding Counter,Converter={StaticResource IntToKoleckaConverterKey}}" 
+                 TextAlignment="Center"/>
         <Button Content="Vrť" Click="Button_Click_Vrt"/>
         <TextBox x:Name="VrtText" Text="{Binding Vrtule}" TextAlignment="Center" />
     </StackPanel>
