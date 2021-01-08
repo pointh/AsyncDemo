@@ -25,8 +25,8 @@ namespace WpfAsync
 
         // Dvě vlastnosti, které jsou zapojené do data bindingu z XAML
         // jsou Counter a Vrtule (viz MainWindow.xaml)
-        private string counter;
-        public string Counter
+        private int counter;
+        public int Counter
         {
             get { return counter; }
             set
@@ -70,7 +70,7 @@ namespace WpfAsync
                 {
                     for (int i = 15; i > 0; i--)
                     {
-                        Counter = i.ToString();
+                        Counter = i;
 
                         // Jsme na threadpool threadu, takže nezablokujeme UI thread
                         // Vteřinu počká, než změní obsah Counter
@@ -80,7 +80,6 @@ namespace WpfAsync
                     // Všichni, kdo mají token z cts zdroje dostanou informaci
                     // o požadavku na zastavení. (ct.IsCancellationRequested bude true)
                     cts.Cancel();
-                    Counter = "";
                 });
         }
 
