@@ -59,16 +59,33 @@ namespace WpfAsync
             this.DataContext = this;
         }
 
+        private void Prace()
+        {
+            for (int i = 15; i >= 0; i--)
+            {
+                Counter = i;
+
+                // Jsme na threadpool threadu, takže nezablokujeme UI thread
+                // Vteřinu počká, než změní obsah Counter
+                Thread.Sleep(1000);
+            }
+
+            // Všichni, kdo mají token z cts zdroje dostanou informaci
+            // o požadavku na zastavení. (ct.IsCancellationRequested bude true)
+            cts.Cancel();
+        }
+    
 
         private void Button_Click_Prace(object sender, RoutedEventArgs e)
         {
             cts = new CancellationTokenSource();
             ct = cts.Token;
 
+            /**/
             // Pošli cyklus na threadpool thread
             Task.Run(() =>
                 {
-                    for (int i = 15; i > 0; i--)
+                    for (int i = 15; i >= 0; i--)
                     {
                         Counter = i;
 
@@ -81,6 +98,12 @@ namespace WpfAsync
                     // o požadavku na zastavení. (ct.IsCancellationRequested bude true)
                     cts.Cancel();
                 });
+            /**/
+
+            /////////////// Lambda je "syntactic sugar" a hodně trendy
+            // Dalo by se to napsat i takto, bez lambdy:
+            // Task.Run(Prace);
+            /////////////// Stačí jen zakomentovat verzi s lambdou a odkomentovat tuto část
         }
 
         // Když chceme, aby asynchronní metoda něco vracela, používáme generickou konstrukci

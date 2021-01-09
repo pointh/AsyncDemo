@@ -13,7 +13,16 @@ namespace WpfAsync
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int i = (int)value;
-            return $"Ještě {i} koleček";
+            string kolecko;
+
+            switch(i)
+            {
+                case 0: return ":-)";
+                case 1: kolecko = "kolečko"; break;
+                case 2: case 3: case 4: kolecko = "kolečka"; break;
+                default: kolecko = "koleček"; break;
+            }
+            return $"Musím odvézt ještě {i} {kolecko} betonu :-(";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
