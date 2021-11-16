@@ -83,13 +83,16 @@ namespace AsyncDemoNS
             // fire and forget - nečekej na výsledek
             MocPrace();
 
-            for (int k = 15; k <= 21; k++)
+            Console.SetCursorPosition(0, 20);
+            Console.WriteLine("Čekám na Enter");
+
+            for (int k = 15; k <= 16; k++)
             {
-                for (int j = 15; j <= 21; j++)
+                for (int j = 15; j <= 16; j++)
                 {
                     // fire and forget - nečekej na výsledek
                     // Vrtule se naplánují v thread poolu, o spouštění si rozhodne OS
-                    Thread t = new Thread(() => Vrtule(k, j));
+                    Thread t = new Thread(async () => await Vrtule (k, j));
                     t.IsBackground = true;
                     t.Name = $"{k}:{j}";
                     t.Priority = ThreadPriority.AboveNormal;
@@ -98,7 +101,7 @@ namespace AsyncDemoNS
             }
 
             // tohle se vypíše hned, pokud kdykoliv přijde Enter, aplikace skončí
-            Console.WriteLine("Čekám na Enter");
+            
             Console.ReadLine();
         }
     }
