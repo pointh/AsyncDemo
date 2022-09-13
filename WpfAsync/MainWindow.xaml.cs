@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Threading;
+using System.Threading.Tasks;
 
 // pro binding!!
 using System.ComponentModel;
@@ -59,7 +60,7 @@ namespace WpfAsync
             this.DataContext = this;
         }
 
-        private void Prace()
+        private async void Prace()
         {
             for (int i = 15; i >= 0; i--)
             {
@@ -67,7 +68,8 @@ namespace WpfAsync
 
                 // Jsme na threadpool threadu, takže nezablokujeme UI thread
                 // Vteřinu počká, než změní obsah Counter
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
+                //Thread.Sleep(1000);
             }
 
             // Všichni, kdo mají token z cts zdroje dostanou informaci
@@ -83,7 +85,7 @@ namespace WpfAsync
 
             /**/
             // Pošli cyklus na threadpool thread
-            Task.Run(() =>
+            Task.Run(async () =>
                 {
                     for (int i = 15; i >= 0; i--)
                     {
@@ -91,7 +93,7 @@ namespace WpfAsync
 
                         // Jsme na threadpool threadu, takže nezablokujeme UI thread
                         // Vteřinu počká, než změní obsah Counter
-                        Thread.Sleep(1000);
+                        await Task.Delay(1000);
                     }
 
                     // Všichni, kdo mají token z cts zdroje dostanou informaci
@@ -112,7 +114,7 @@ namespace WpfAsync
         private async Task<int> TocSeVrtuleAsync()
         {
             int i = 0;
-            await Task.Run(() =>
+            await Task.Run( async () =>
             {
                 while (ct.IsCancellationRequested == false)
                 {
@@ -120,15 +122,15 @@ namespace WpfAsync
                     Vrtule = "-";
 
                     // Následující volání Sleep() nezablokují UI thread, protože běží na threadpool threadu
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                     Vrtule = "\\";
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                     Vrtule = "|";
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                     Vrtule = "/";
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                     Vrtule = "/";
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                 }
                 Vrtule = "";
 
@@ -139,7 +141,7 @@ namespace WpfAsync
         private async Task<int> TocSeVrtuleAsync(int delay = 1500)
         {
             int i = 0;
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 while (ct.IsCancellationRequested == false)
                 {
@@ -147,15 +149,15 @@ namespace WpfAsync
                     Vrtule = "-";
 
                     // Následující volání Sleep() nezablokují UI thread, protože běží na threadpool threadu
-                    Thread.Sleep(delay);
+                    await Task.Delay(delay);
                     Vrtule = "\\";
-                    Thread.Sleep(delay);
+                    await Task.Delay(delay);
                     Vrtule = "|";
-                    Thread.Sleep(delay);
+                    await Task.Delay(delay);
                     Vrtule = "/";
-                    Thread.Sleep(delay);
+                    await Task.Delay(delay);
                     Vrtule = "/";
-                    Thread.Sleep(delay);
+                    await Task.Delay(delay);
                 }
                 Vrtule = "";
 
