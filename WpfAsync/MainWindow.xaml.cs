@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Threading;
-using System.Threading.Tasks;
 
 // pro binding!!
 using System.ComponentModel;

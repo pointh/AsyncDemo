@@ -17,19 +17,17 @@ namespace AsyncDemoNS
         public async static Task<int> MocPrace()
         {
             int i = 0;
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (i = 15; i > -1; i--)
                 {
-                    Debug.WriteLine($"MocPrace:{Thread.CurrentThread.ManagedThreadId}" + 
+                    Debug.WriteLine($"MocPrace:{Thread.CurrentThread.ManagedThreadId}" +
                         $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
-                    Thread.Sleep(300);
-                    lock (consoleLock)
-                    {
-                        Console.SetCursorPosition(10, 10);
-                        Console.Write(i);
-                        Console.SetCursorPosition(0, 0);
-                    }
+                    await Task.Delay(300);
+                    Console.SetCursorPosition(10, 10);
+                    Console.Write(i);
+                    Console.SetCursorPosition(0, 0);
+
                 }
                 // když skončíš, pošli CancellationRequest na všechny, kto mají token ze source
                 source.Cancel();
@@ -39,17 +37,14 @@ namespace AsyncDemoNS
 
         public async static Task Vrtule(int x, int y)
         {
-            void OverwriteVrtule(char c)
+            async Task OverwriteVrtule(char c, int x, int y)
             {
-                lock (consoleLock)
-                {
-                    Thread.Sleep(10);
-                    Console.SetCursorPosition(x, y);
-                    Console.Write(c);
-                }
+                await Task.Delay(500);
+                Console.SetCursorPosition(x, y);
+                Console.Write(c);
             }
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 Console.CursorVisible = false;
 
@@ -57,16 +52,16 @@ namespace AsyncDemoNS
                 {
                     if (ct.IsCancellationRequested && x > y)
                     {
-                        OverwriteVrtule('*');
+                        await OverwriteVrtule ('*', x, y);
                         break;
                     }
 
                     Debug.WriteLine($"Vrtule[{x},{y}]: {Thread.CurrentThread.ManagedThreadId}" +
                         $" IsBackground: {Thread.CurrentThread.IsBackground}", "SYNC");
-                    OverwriteVrtule('|');
-                    OverwriteVrtule('/');
-                    OverwriteVrtule('-');
-                    OverwriteVrtule('\\');
+                    await OverwriteVrtule('|', x, y);
+                    await OverwriteVrtule('/', x, y);
+                    await OverwriteVrtule ('-', x, y);
+                    await OverwriteVrtule ('\\', x, y);
                 }
             });
         }
@@ -86,22 +81,17 @@ namespace AsyncDemoNS
             Console.SetCursorPosition(0, 20);
             Console.WriteLine("Čekám na Enter");
 
-            for (int k = 15; k <= 16; k++)
+            Task[] tasks =
             {
-                for (int j = 15; j <= 16; j++)
-                {
-                    // fire and forget - nečekej na výsledek
-                    // Vrtule se naplánují v thread poolu, o spouštění si rozhodne OS
-                    Thread t = new Thread(async () => await Vrtule (k, j));
-                    t.IsBackground = true;
-                    t.Name = $"{k}:{j}";
-                    t.Priority = ThreadPriority.AboveNormal;
-                    t.Start();
-                }
-            }
+                Task.Run(()=>Vrtule(14, 14)),
+                Task.Run(()=>Vrtule(14, 15)),
+                Task.Run(()=>Vrtule(14, 16)),
+                Task.Run(()=>Vrtule(15, 14)),
+                Task.Run(()=>Vrtule(14, 15)),
+                Task.Run(()=>Vrtule(15, 16)),
+            };
 
-            // tohle se vypíše hned, pokud kdykoliv přijde Enter, aplikace skončí
-            
+            Task.WaitAll(tasks, ct);
             Console.ReadLine();
         }
     }
