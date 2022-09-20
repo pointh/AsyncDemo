@@ -32,7 +32,7 @@ namespace WpfAsync
             set
             {
                 counter = value;
-                // Dej vědět bindingu, jaké vlastnost se změnila, ať si aktualizuje UI
+                // Dej vědět bindingu, že vlastnost se změnila, ať si aktualizuje UI
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Counter"));
             }
         }

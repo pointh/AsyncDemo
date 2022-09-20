@@ -91,9 +91,6 @@ namespace XamarindAsyncDemo
             });
         }
 
-
-
-
         static CancellationTokenSource cancelSource = new CancellationTokenSource();
         CancellationToken ct = cancelSource.Token;
 

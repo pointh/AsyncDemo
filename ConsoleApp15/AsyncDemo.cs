@@ -8,12 +8,12 @@ namespace AsyncDemoNS
 {
     class AsyncDemo
     {
-        // Pokud chceme mít možnost ukončit procesy, které jedou a vláknech v threadpoolu,
+        // Pokud chceme mít možnost ukončit procesy, které jedou na vláknech v threadpoolu,
         // musíme pracovat s objektem CacellationToken. Ten funguje jako sdílený semafor pro 
         // všechna jedoucí vlákna. Je řízený pomocí CancellationTokenSource.
         // V našem případě se voláním 'source.Cancel()' nastaví stopka na ct a my se podle toho,
         // zda ct.IsCancellationRequested == true/false můžeme
-        // rozhodnout, zda má program dál pokračovat
+        // rozhodnout, zda má program na vláknu dál pokračovat
         private static readonly CancellationTokenSource source = new CancellationTokenSource();
         private static readonly CancellationToken ct = source.Token;
 
@@ -42,7 +42,7 @@ namespace AsyncDemoNS
                         Environment.Exit(200);
                     }
                     
-                    await Task.Delay(500);
+                    await Task.Delay(500); // Jen aby to déle trvalo, simuluje zátěž
                     
                     // Zablokování Console pro aktuální vlákno,
                     // ostatní vlákna musejí čekat na dokončení bloku uvnitř lock(lockObject){...}
@@ -138,6 +138,10 @@ namespace AsyncDemoNS
                 {
                     Console.SetCursorPosition(0, 20);
                     Console.WriteLine($"Operace přerušena na hodnotě {taskMocPrace.Result}");
+
+                    // Jenom u tasku taskMocPrace nás zajímá návratová hodnota,
+                    // taskMocPrace.Result nám ji vrátí. Je to int, protože
+                    // task jsme deklarovali jako Task<int> taskMocPrace
                     Environment.Exit(taskMocPrace.Result);
                 }
             }
