@@ -22,13 +22,13 @@ namespace XamarindAsyncDemo
         // nenechá UI vlákno překreslit formulář.
         // Takže přestože je obsah polí nastavený správně, jak vidíme v Debug,
         // uživatel jej neuvidí.
-        private void Start_ClickedSync(object sender, EventArgs e)
+        private async void Start_ClickedSync(object sender, EventArgs e)
         {
             int i = 1, j = 1;
 
             for (; ; )
             {
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
                 Fast.Text = $"{i++}";
 
                 if (i % 5 == 0)
@@ -48,11 +48,11 @@ namespace XamarindAsyncDemo
         {
             int i = 1, j = 1;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (; ; )
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000);
                     Fast.Text = $"{i++}";
 
                     if (i % 5 == 0)
@@ -72,11 +72,11 @@ namespace XamarindAsyncDemo
         {
             int i = 1, j = 1;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (; ; )
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000);
                     // Změnu můžeme provést jenom na UI threadu
                     MainThread.BeginInvokeOnMainThread(() => { Fast.Text = $"{i++}"; });
 
@@ -110,7 +110,7 @@ namespace XamarindAsyncDemo
             Slow.Text = $"{j}"; // hlavně kvůli restartu counterů, aby se nečekalo na
                                 // další aktualizaci proměnné j
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (; ; )
                 {
@@ -122,7 +122,7 @@ namespace XamarindAsyncDemo
                         MainThread.BeginInvokeOnMainThread(() => { Slow.Text = $"{++j}"; });
                     }
                     Debug.WriteLine($"i={i}, j={j}");
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000);
 
                     // pokud cancelSource zavolal Cancel(), je v odpovídajícím tokenu
                     // ct nastaveno IsCancellationRequested na true
