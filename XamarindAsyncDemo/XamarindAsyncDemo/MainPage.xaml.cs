@@ -68,6 +68,7 @@ namespace XamarindAsyncDemo
         // Necháme for pracovat v thread poolu a pomocí metody z 
         // Xamarin Essentials MainThread.BeginInvokeOnMainThread
         // necháme "překreslovací" část kódu vykonat na UI (main) vlákně.
+        // Ale nemáme žádný způsob, jak přerušit odpočítávání.
         private async void Start_ClickedAsync(object sender, EventArgs e)
         {
             int i = 1, j = 1;
@@ -91,6 +92,9 @@ namespace XamarindAsyncDemo
             });
         }
 
+        
+        
+        // Toto funguje:
         static CancellationTokenSource cancelSource = new CancellationTokenSource();
         CancellationToken ct = cancelSource.Token;
 
@@ -131,6 +135,8 @@ namespace XamarindAsyncDemo
                         // necháme GC zrušit starý cancelSource a vytvoříme nový
                         // s připojeným cancellation tokenem
                         // a ukončíme nekonečný cyklus
+                        // PROTOŽE
+                        // ct.CancellationRequested je readonly vlastnost, poskytuje pouze getter.
                         cancelSource = new CancellationTokenSource();
                         ct = cancelSource.Token;
                         break;
