@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDemo", "ConsoleApp15\AsyncDemo.csproj", "{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}"
 EndProject
@@ -16,7 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarindAsyncDemo.Android",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XamarindAsyncDemo", "XamarindAsyncDemo\XamarindAsyncDemo\XamarindAsyncDemo.csproj", "{FDF2B99A-96CF-4382-8BE4-8B384EE2EAFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDemo2", "AsyncDemo2\AsyncDemo2.csproj", "{74F0F943-EBB2-4231-A4E9-DB5DA0AEA93A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDemo2", "AsyncDemo2\AsyncDemo2.csproj", "{74F0F943-EBB2-4231-A4E9-DB5DA0AEA93A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncConsole1", "AsyncConsole1\AsyncConsole1.csproj", "{58218039-B51F-41F4-B9AB-93E000832C59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{74F0F943-EBB2-4231-A4E9-DB5DA0AEA93A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74F0F943-EBB2-4231-A4E9-DB5DA0AEA93A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74F0F943-EBB2-4231-A4E9-DB5DA0AEA93A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58218039-B51F-41F4-B9AB-93E000832C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58218039-B51F-41F4-B9AB-93E000832C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58218039-B51F-41F4-B9AB-93E000832C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58218039-B51F-41F4-B9AB-93E000832C59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
