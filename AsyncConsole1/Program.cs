@@ -9,7 +9,8 @@ namespace AsyncConsole1
         private static readonly object consoleLock = new object(); 
         static async Task Main(string[] args)
         {
-            Console.WriteLine($"Main: Thread {Thread.CurrentThread.Name} Id={Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"Main: Thread {Thread.CurrentThread.Name} " +
+                $"Id={Thread.CurrentThread.ManagedThreadId}");
 
 #if NOAWAIT
             CountLeftAsync();
@@ -75,7 +76,8 @@ namespace AsyncConsole1
         static void ReportThread(int i)
         {
             ThreadPool.GetMaxThreads(out int workerThreads, out int _);
-            Console.WriteLine($"{i} : Thread {Thread.CurrentThread.Name} Id={Thread.CurrentThread.ManagedThreadId} z {workerThreads}");
+            Console.WriteLine($"{i} : Thread {Thread.CurrentThread.Name} " +
+                $"Id={Thread.CurrentThread.ManagedThreadId} z {workerThreads}");
         }
     }
 }
