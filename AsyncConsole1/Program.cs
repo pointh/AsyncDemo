@@ -1,15 +1,14 @@
-﻿//#define WHENALL
+﻿#define WHENALL
 //#define WHENANY
-#define NOAWAIT
+//#define NOAWAIT
+//#define JUSTAWAIT
 namespace AsyncConsole1
 {
     internal class Program
     {
-        static object o; 
+        private static readonly object consoleLock = new object(); 
         static async Task Main(string[] args)
         {
-            o = new object();
-
             Console.WriteLine($"Main: Thread {Thread.CurrentThread.Name} Id={Thread.CurrentThread.ManagedThreadId}");
 
 #if NOAWAIT
@@ -50,10 +49,9 @@ namespace AsyncConsole1
         {
             for (int i = 0; i < 5; i++)
             {
-                lock (o)
+                lock (consoleLock)
                 {
                     Console.SetCursorPosition(0, 2);
-                    Console.BackgroundColor = ConsoleColor.Green;
                     ReportThread(i);
                 }
                 await Task.Delay(1000);
@@ -63,12 +61,11 @@ namespace AsyncConsole1
         // Běží rychleji!
         static async Task CountRightAsync()
         {
-            for (int i = 5; i > -1; i--)
+            for (int i = 5; i > 0; i--)
             {
-                lock (o)
+                lock (consoleLock)
                 {
                     Console.SetCursorPosition(60, 23);
-                    Console.BackgroundColor = ConsoleColor.Red;
                     ReportThread(i);
                 }
                 await Task.Delay(600);
@@ -77,7 +74,6 @@ namespace AsyncConsole1
 
         static void ReportThread(int i)
         {
-            Console.BackgroundColor= ConsoleColor.Black;
             ThreadPool.GetMaxThreads(out int workerThreads, out int _);
             Console.WriteLine($"{i} : Thread {Thread.CurrentThread.Name} Id={Thread.CurrentThread.ManagedThreadId} z {workerThreads}");
         }
