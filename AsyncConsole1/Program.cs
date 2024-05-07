@@ -1,4 +1,4 @@
-﻿#define WHENALL
+﻿//#define WHENALL
 //#define WHENANY
 //#define NOAWAIT
 //#define JUSTAWAIT
@@ -25,9 +25,7 @@ namespace AsyncConsole1
             Task t = Task.Run(CountLeftAsync);
             Task v = Task.Run(CountRightAsync);
             Task[] tasks = new Task[] { t, v };
-            // Task.Run je název zavádějící, 
-            // ve skutečnosti se metody nespouštějí,
-            // ale zařadí se do fronty pro zpracování.
+            // Task.Run zařadí Metudy do fronty pro zpracování.
             // Task.Run vrací "pointer" na úlohu,
             // a můžeme jím ovlivňovat její běh.
 
