@@ -1,5 +1,5 @@
 ﻿//#define WHENALL
-//#define WHENANY
+#define WHENANY
 //#define NOAWAIT
 //#define JUSTAWAIT
 namespace AsyncConsole1
