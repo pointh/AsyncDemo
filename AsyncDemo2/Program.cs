@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define WAITFORALL
+
+using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
@@ -40,6 +42,16 @@ namespace AsyncDemo2
 
         static async Task Main(string[] args)
         {
+            // Seznam všech spuštěných úloh
+            // (asynchronně spouštíme více úloh najednou)
+            // Abychom věděli, na co čekat
+            // Použijeme List<Task>, protože počet úloh není pevně dán
+            // (přidáme ještě 100 úloh Z)
+            // Pro úlohy, které nic nevrací, použijeme Task
+            // Pro úlohy, které něco vrací, použijeme Task<T>
+            // (T je návratový typ)
+            // Všechny Task lze uložit do List<Task> (nebo pole Task[])
+            // protože Task<T> je potomkem Task
             List<Task> tList = new List<Task>();
 
             Stopwatch sw = new Stopwatch();
@@ -57,12 +69,12 @@ namespace AsyncDemo2
             // "Funkcionální" přidání úloh do tList:
             // Enumerable.Range vrací sekvenci Enumerable,
             // Select z každého i vytvoří volání Task.Run(() => Z(i))
-            tList.AddRange(Enumerable.Range(0, 100).Select(i => Task.Run(() => Z(i))));
+            tList.AddRange(Enumerable.Range(0, 10).Select(i => Task.Run(() => Z(i))));
 
             // Již v tomto okamžiku některé z úloh ze seznamu tList běží,
             // threadpool scheduler je startuje v pořadí, které nesouvisí
             // s pořadím ukládání tasků do tList
-            Console.WriteLine($"Začátek v {sw.ElapsedMilliseconds}"); 
+            Console.WriteLine($"Začátek v {sw.ElapsedMilliseconds}ms"); 
             // Thread.Sleep(10000);
             // Je vcelku jedno, jestli bude hlavní vlákno spát, všechno
             // pojede na threadpoolu       
@@ -72,14 +84,18 @@ namespace AsyncDemo2
             // To se jen informace "t dokončeno" vždy vypíše až po vypsání návratové hodnoty t
             // (tedy volání A())
             Console.WriteLine($"{sw.ElapsedMilliseconds}, t dokončeno");
-            
+
             // Pokud nebude program čekat pomocí WailAll, program dojede na konec
-            // a úlohy spuštěné na threadpoolu se nedokončí (zaniknou s Main()).
+            // a úlohy Z spuštěné na threadpoolu se nedokončí (zaniknou s Main()).
+            // Proto je zde čekání na dokončení všech úloh v tList
+            // Převod List<Task> na pole Task[]
+#if WAITFORALL
             Console.WriteLine("Čekání na pole tasků");
             Task.WaitAll(tList.ToArray()); // WailAll pracuje pouze s polem
+#endif
 
             // Konec bude poslední, co program vypíše
-            Console.WriteLine($"{sw.ElapsedMilliseconds}, Konec");
+            Console.WriteLine($"{sw.ElapsedMilliseconds}ms, Konec");
 
             // Celkový čas zpracování je podstatně kratší, než je součet
             // časů všech spuštěných úloh!
