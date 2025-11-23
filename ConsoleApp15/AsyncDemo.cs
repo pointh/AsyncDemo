@@ -49,7 +49,7 @@ namespace AsyncDemoNS
                     lock (lockObject)
                     {
                         Console.SetCursorPosition(10, 10);
-                        Console.Write(i);
+                        Console.Write($"{i} ");
 
                         // Pokud uživatel zadal cokoliv z klávesnice,
                         // ukonči cyklus, ukonči všechna vlákna napojená na source
@@ -60,8 +60,8 @@ namespace AsyncDemoNS
                         }
                     }
                 }
-                // když skončíš cyklus, nastav semafor "Končíme" pro všechny, kto mají token ze source,
-                // (tedy odkazují se na proměnnou ct typu CancellationToken)
+                // když skončíš cyklus - doběhnutím nebo přerušením,nastav semafor "Končíme" pro všechny,
+                // kto mají token ze source (tedy odkazují se na proměnnou ct typu CancellationToken)
                 source.Cancel();
             });
             return i;
@@ -73,7 +73,7 @@ namespace AsyncDemoNS
             // toto je interní metoda, platná pouze v rozsahu metody Vrtule
             async Task OverwriteVrtule(char c, int x, int y)
             {
-                await Task.Delay(500);
+                await Task.Delay(Random.Shared.Next(0, 500));
 
                 lock (lockObject) {
                     Console.CursorVisible = false;
@@ -82,6 +82,19 @@ namespace AsyncDemoNS
                 }
             }
 
+            // Task.Run zajistí, že tato metoda poběží na vlákně z threadpoolu, což umožní asynchronní provádění
+            // více instancí této metody najednou
+            // Opět používáme konstrukci async () => {...} pro definici bezejmenné asynchronní funkce
+            // která poběží na vlákně z threadpoolu
+            // Uvnitř této funkce máme nekonečný cyklus, který bude provádět animaci vrtule
+            // dokud nedojde k přerušení pomocí CancellationToken ct
+            // Metoda Vrtule tedy poběží, dokud někdo nezavolá source.Cancel(),
+            // což se stane v metodě MocPrace, pokud uživatel stiskne nějakou klávesu
+            // nebo pokud cyklus v MocPrace doběhne do konce
+            // V každé iteraci cyklu se zavolá interní asynchronní metoda OverwriteVrtule,
+            // která na pozici (x, y) přepíše znak vrtule jedním ze čtyř znaků ('|', '/', '-', '\')
+            // s náhodným zpožděním, aby animace vypadala přirozeně
+            
             await Task.Run(async () =>
             {
                 while (true)
@@ -110,18 +123,20 @@ namespace AsyncDemoNS
             // asynchronním režimu můžeme pracovat s celočíselnou navrácenou hodnotou
             Task<int> taskMocPrace = Task.Run(() => MocPrace());
 
-            Task[] tasks =
+            // Vytvoř pole vrtulí na obrazovce
+            // Vytvoříme si seznam úloh (tasků), které budeme chtít spustit
+            // na vláknech v threadpoolu
+            // Pro každou pozici (i, j) v zadaném rozsahu vytvoříme úlohu Vrtule(i, j)
+            List<Task> taskList = new List<Task>();
+            for (int i = 14; i <= 95; i++)
             {
-                taskMocPrace, // připravili jsme si v minulém kroku
-                // spustíme 6x metodu Vrtule a necháme na Scheduleru threadpoolu,
-                // aby si rozhodl, na jakém vláknu které volání pojede
-                Task.Run(()=>Vrtule(14, 14)),
-                Task.Run(()=>Vrtule(14, 15)),
-                Task.Run(()=>Vrtule(14, 16)),
-                Task.Run(()=>Vrtule(15, 14)),
-                Task.Run(()=>Vrtule(15, 15)),
-                Task.Run(()=>Vrtule(15, 16)),
-            };
+                for (int j = 14; j <= 19; j++)
+                {
+                    taskList.Add(Vrtule(i, j));
+                }
+            }
+
+            Task[] tasks = taskList.ToArray();
 
             try
             {

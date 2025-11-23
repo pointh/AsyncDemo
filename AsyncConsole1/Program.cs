@@ -25,7 +25,7 @@ namespace AsyncConsole1
             Task t = Task.Run(CountLeftAsync);
             Task v = Task.Run(CountRightAsync);
             Task[] tasks = new Task[] { t, v };
-            // Task.Run zařadí Metudy do fronty pro zpracování.
+            // Task.Run zařadí Metody do fronty pro zpracování.
             // Task.Run vrací "pointer" na úlohu,
             // a můžeme jím ovlivňovat její běh.
 
@@ -46,7 +46,7 @@ namespace AsyncConsole1
 
         static async Task CountLeftAsync()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i <= 5; i++)
             {
                 lock (consoleLock)
                 {
@@ -60,7 +60,7 @@ namespace AsyncConsole1
         // Běží rychleji!
         static async Task CountRightAsync()
         {
-            for (int i = 5; i > 0; i--)
+            for (int i = 5; i >= 0; i--)
             {
                 lock (consoleLock)
                 {
