@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace AsyncDemo2
 {
-    class Program
+    class NavalNaThreadPoolu
     {
         private static async Task<string> A()
         {

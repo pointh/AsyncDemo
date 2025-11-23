@@ -4,7 +4,7 @@
 //#define JUSTAWAIT
 namespace AsyncConsole1
 {
-    internal class Program
+    internal class WaitOrDontWait
     {
         private static readonly object consoleLock = new object(); 
         static async Task Main(string[] args)

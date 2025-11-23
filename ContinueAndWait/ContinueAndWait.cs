@@ -1,6 +1,6 @@
 ﻿namespace ContinueAndWait
 {
-    public class Program
+    public class ContinueAndWait
     {
         public static void Main()
         {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AsyncDemoNS
 {
-    class AsyncDemo
+    class Vrtule
     {
         // Pokud chceme mít možnost ukončit procesy, které jedou na vláknech v threadpoolu,
         // musíme pracovat s objektem CacellationToken. Ten funguje jako sdílený semafor pro 
