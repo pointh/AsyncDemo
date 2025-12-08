@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vrtule", "ConsoleApp15\Vrtule.csproj", "{3EB0A4E4-4E0F-4572-964E-6F8EE17E0C1A}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfAsyncDotNet", "WpfAsyncDotNet\WpfAsyncDotNet.csproj", "{DF02C2F0-A7B1-406D-B105-E1F0775C8AC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContinueAndWait", "ContinueAndWait\ContinueAndWait.csproj", "{D3C657B6-AE34-4BEC-9632-67CCCF17C4AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReturnAsyncValues", "ReturnAsyncValues\ReturnAsyncValues.csproj", "{1DA312DE-113E-40DC-A760-C1BDD129938C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{D3C657B6-AE34-4BEC-9632-67CCCF17C4AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3C657B6-AE34-4BEC-9632-67CCCF17C4AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3C657B6-AE34-4BEC-9632-67CCCF17C4AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA312DE-113E-40DC-A760-C1BDD129938C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA312DE-113E-40DC-A760-C1BDD129938C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA312DE-113E-40DC-A760-C1BDD129938C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA312DE-113E-40DC-A760-C1BDD129938C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
